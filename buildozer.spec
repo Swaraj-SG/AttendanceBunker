@@ -37,7 +37,7 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,kivymd
+requirements = kivy,kivymd
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
@@ -400,6 +400,8 @@ ios.codesign.allowed = false
 # This option should be defined along with `app_url` and `display_image_url` options.
 #ios.manifest.full_size_image_url =
 
+- name: Accept Android SDK licenses
+  run: yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
 [buildozer]
 
