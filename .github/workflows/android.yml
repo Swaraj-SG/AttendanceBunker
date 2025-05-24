@@ -22,6 +22,7 @@ jobs:
             python3-dev libssl-dev libffi-dev libgtk2.0-dev \
             pkg-config openjdk-11-jdk zip unzip
           pip install --upgrade buildozer kivy kivymd
+          pip install cython virtualenv buildozer
 
       - name: Build APK
         run: |
