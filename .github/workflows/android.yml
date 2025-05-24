@@ -28,7 +28,7 @@ jobs:
           buildozer android debug --verbose
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: attendance-bunker-apk
           path: bin/AttendanceBunker-*-debug.apk
