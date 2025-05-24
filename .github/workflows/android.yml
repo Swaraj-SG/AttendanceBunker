@@ -2,35 +2,49 @@ name: Build APK - Attendance Bunker
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  build-attendance-bunker-apk:
+  build-apk:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Attendance Bunker repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.10
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Buildozer & dependencies
+      - name: Install Buildozer and dependencies
         run: |
           sudo apt update
           sudo apt install -y zip unzip openjdk-17-jdk python3-pip python3-setuptools git
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Build APK with Buildozer
+      - name: Install Android SDK and Build Tools
         run: |
+          mkdir -p $HOME/android-sdk
+          cd $HOME/android-sdk
+          wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O cmdline-tools.zip
+          unzip cmdline-tools.zip
+          mkdir -p cmdline-tools/latest
+          mv cmdline-tools/* cmdline-tools/latest/
+          export ANDROID_HOME=$HOME/android-sdk
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$PATH
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;34.0.0"
+
+      - name: Build APK using Buildozer
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
+          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
           buildozer android debug --verbose
 
-      - name: Upload Attendance Bunker APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: attendance-bunker-apk
