@@ -14,26 +14,21 @@ jobs:
       - name: Checkout Attendance Bunker repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.10 for Attendance Bunker
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Android Build Tools
-        run: |
-          sdkmanager "build-tools;34.0.0"
-
-
-      - name: Install Buildozer and dependencies for Attendance Bunker
+      - name: Install Buildozer & dependencies
         run: |
           sudo apt update
-          sudo apt install -y zip unzip openjdk-17-jdk
-          python -m pip install --upgrade pip
+          sudo apt install -y zip unzip openjdk-17-jdk python3-pip python3-setuptools git
+          pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Build APK for Attendance Bunker
+      - name: Build APK with Buildozer
         run: |
-          buildozer android debug
+          buildozer android debug --verbose
 
       - name: Upload Attendance Bunker APK
         uses: actions/upload-artifact@v4
