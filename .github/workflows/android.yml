@@ -23,8 +23,7 @@ jobs:
             pkg-config openjdk-11-jdk zip unzip
           pip install --upgrade buildozer kivy kivymd
           pip install cython virtualenv buildozer
-          pip install aidl
-
+          
       - name: Build APK
         run: |
           buildozer android debug --verbose
