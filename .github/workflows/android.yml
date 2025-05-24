@@ -1,0 +1,34 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Buildozer & deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential git python3-pip \
+            python3-dev libssl-dev libffi-dev libgtk2.0-dev \
+            pkg-config openjdk-11-jdk zip unzip
+          pip install --upgrade buildozer kivy kivymd
+
+      - name: Build APK
+        run: |
+          buildozer android debug --verbose
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: attendance-bunker-apk
+          path: bin/AttendanceBunker-*-debug.apk
